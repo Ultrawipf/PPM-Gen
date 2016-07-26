@@ -34,6 +34,7 @@ private:
     int ELE;
     int AIL;
     int RUD;
+    int AUX1;
 
     bool arrowMode;
 
@@ -57,6 +58,7 @@ private:
     bool downDown=false;
     bool leftDown=false;
     bool rightDown=false;
+    bool aux1Active=false;
 private slots:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);

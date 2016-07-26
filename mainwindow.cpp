@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <qdebug.h>
 
-#define CHANNELS 4 //Number of channels in a ppm frame
+#define CHANNELS 6 //Number of channels in a ppm frame
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -30,7 +30,10 @@ void MainWindow::updateSettings(){
     ELE=ui->chanElespinBox->value()-1;
     AIL=ui->chanAilspinBox->value()-1;
     RUD=ui->chanRudspinBox->value()-1;
+    AUX1=ui->chanAUXspinBox_1->value()-1;
     arrowMode=ui->arrowModecheckBox->checkState();
+
+
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event){
@@ -83,6 +86,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
     }else if(arrowMode && event->key()==Qt::Key_Right){
         rightDown=true;
         ppmGen->setChannelData(AIL,2000);
+    }else if(event->key()==Qt::Key_R){
+        aux1Active=!aux1Active;
+        ppmGen->setChannelData(AUX1,aux1Active?2000:1000);
+        ui->auxLabel->setText("AUX1: "+QString(aux1Active?"on":"off"));
     }
 
 }
@@ -178,6 +185,8 @@ void MainWindow::on_startButton_clicked()
 {
     this->grabKeyboard();
     updateSettings();
+    aux1Active=false;
+    ppmGen->setChannelData(AUX1,1000);
     ppmGen->setChannelData(THR,1000);
     ppmGen->start();
     setCursor( QCursor( Qt::BlankCursor ) );
